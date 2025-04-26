@@ -1,0 +1,1 @@
+Şimdilik Burada Dursun Askerden Gelince Bitireceğim :)
