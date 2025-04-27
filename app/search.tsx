@@ -37,12 +37,12 @@ const SearchScreen = () => {
     Animated.loop(
       Animated.sequence([
         Animated.timing(bounceAnim, {
-          toValue: -10, // Yukarı çıkma
+          toValue: -10,
           duration: 500,
           useNativeDriver: true,
         }),
         Animated.timing(bounceAnim, {
-          toValue: 0, // Aşağı dönme
+          toValue: 0,
           duration: 500,
           useNativeDriver: true,
         }),
@@ -51,9 +51,9 @@ const SearchScreen = () => {
 
     Animated.loop(
       Animated.timing(rotateAnim.x, {
-        toValue: 360, // 🔄 Sürekli 360 derece dönme
-        duration: 2000, // Daha uzun süre = daha akıcı geçiş
-        easing: Easing.linear, // 🚀 Doğrudan çizgisel dönüş
+        toValue: 360,
+        duration: 2000,
+        easing: Easing.linear,
         useNativeDriver: true,
       })
     ).start();

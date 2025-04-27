@@ -3,7 +3,7 @@ export interface MusicData {
   artworkUrl100: string;
   trackName: string;
   artistName: string;
-  previewUrl: string; // 🔥 Deezer ses önizleme URL'si!
+  previewUrl: string;
 }
 
 interface DeezerSong {
@@ -22,7 +22,7 @@ export const fetchDeezerMusicData = async (searchTerm: string, page: number): Pr
 
     if (!data || !data.data || data.data.length === 0) {
       console.warn("Yeni veri bulunamadı, API sınırına ulaşıldı.");
-      return []; // 📌 Eğer veri yoksa boş array döndürerek döngüyü durduralım!
+      return []; // veri yoksa boş array
     }
 
     return data.data.map((song: DeezerSong) => ({
@@ -30,18 +30,18 @@ export const fetchDeezerMusicData = async (searchTerm: string, page: number): Pr
       artworkUrl100: song.album.cover,
       trackName: song.title,
       artistName: song.artist.name,
-      previewUrl: song.preview // 🎵 30 sn'lik müzik önizlemesi
+      previewUrl: song.preview
     }));
   } catch (error) {
     console.error("Deezer API hatası:", error);
-    return []; // 📌 Eğer hata alırsak yine boş array döndürerek döngüyü keselim!
+    return []; // hata alırsak boş array
   }
 };
 
 // 🎵 Türkiye’de Popüler Şarkıları Çekme
 export const fetchTopTurkishSongs = async (): Promise<MusicData[]> => {
   try {
-    const response = await fetch("https://api.deezer.com/playlist/1116189071"); // 🔥 Türkiye’nin popüler müzik listesi
+    const response = await fetch("https://api.deezer.com/playlist/1116189071");
     const data = await response.json();
 
     return data.tracks.data.map((song: DeezerSong) => ({

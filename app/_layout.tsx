@@ -2,7 +2,7 @@ import { Stack, useRouter, usePathname } from "expo-router";
 import { TouchableOpacity, Text, View, useWindowDimensions } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
-import SplashScreenComponent from "./SplashScreen"; // 🔥 SplashScreen bileşenini dışarı taşıdık!
+import SplashScreenComponent from "./SplashScreen";
 import "../global.css";
 
 export default function RootLayout() {
@@ -25,7 +25,7 @@ export default function RootLayout() {
   };
 
   if (!isLoaded) {
-    return <SplashScreenComponent onFinish={() => setIsLoaded(true)} />; // 🔥 Açılış animasyonu çalıştırılıyor!
+    return <SplashScreenComponent onFinish={() => setIsLoaded(true)} />; // açılış animasyonu
   }
 
   return (
