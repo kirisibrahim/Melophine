@@ -14,7 +14,7 @@ interface DeezerSong {
   preview: string;
 }
 
-// 🔍 Kullanıcı Girdisine Bağlı Müzik Arama
+// Kullanıcı Girdisine Bağlı Müzik Arama
 export const fetchDeezerMusicData = async (searchTerm: string, page: number): Promise<MusicData[]> => {
   try {
     const response = await fetch(`https://api.deezer.com/search?q=${encodeURIComponent(searchTerm)}&index=${page * 50}&limit=50`);
@@ -38,7 +38,7 @@ export const fetchDeezerMusicData = async (searchTerm: string, page: number): Pr
   }
 };
 
-// 🎵 Türkiye’de Popüler Şarkıları Çekme
+// Türkiye’de Popüler Şarkıları Çekme
 export const fetchTopTurkishSongs = async (): Promise<MusicData[]> => {
   try {
     const response = await fetch("https://api.deezer.com/playlist/1116189071");
@@ -56,3 +56,28 @@ export const fetchTopTurkishSongs = async (): Promise<MusicData[]> => {
     return [];
   }
 };
+
+export const fetchQuizSongs = async (): Promise<MusicData[]> => {
+  try {
+    const quizPlaylistId = "13794659001";
+    const response = await fetch(`https://api.deezer.com/playlist/${quizPlaylistId}`);
+    const data = await response.json();
+
+    if (!data.tracks || !data.tracks.data) {
+      console.warn("Playlist verisi bulunamadı.");
+      return [];
+    }
+
+    return data.tracks.data.map((song: DeezerSong) => ({
+      trackId: song.id,
+      artworkUrl100: song.album.cover,
+      trackName: song.title,
+      artistName: song.artist.name,
+      previewUrl: song.preview,
+    }));
+  } catch (error) {
+    console.error("Deezer API hatası (fetchQuizSongs):", error);
+    return [];
+  }
+};
+

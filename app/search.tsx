@@ -6,6 +6,7 @@ import {
 } from "react-native";
 import { fetchDeezerMusicData, MusicData } from "../utils/fetchMusicData";
 import { getRandomTurkishSong } from "../utils/getRandomSong";
+import useFavorites from "../hooks/useFavorites";
 import { Audio } from "expo-av";
 import * as Animatable from "react-native-animatable";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
@@ -23,6 +24,7 @@ const SearchScreen = () => {
   const [sound, setSound] = useState<Audio.Sound | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTrack, setCurrentTrack] = useState<string | null>(null);
+  const { favorites, toggleFavorite } = useFavorites();
   const [hasMoreData, setHasMoreData] = useState(true);
   const flatListRef = useRef<FlatList>(null);
   const currentTrackData: MusicData | null = songs.find((s) => s.previewUrl === currentTrack) || null;
@@ -347,19 +349,26 @@ const SearchScreen = () => {
           onEndReached={hasMoreData ? fetchMoreSongs : null}
           onEndReachedThreshold={0.8} //   %80 te tekrar yükleme tetiklenecek
           ListFooterComponent={loading ? <ActivityIndicator size="large" color="#FACC15" /> : null}
-          contentContainerStyle={{ paddingBottom: 20, paddingTop: 20 }}
+          contentContainerStyle={{ paddingBottom: 100, paddingTop: 20 }}
           renderItem={({ item }) => (
             <Pressable
               onPress={() => playPreview(item.previewUrl)}
-              className="bg-gray-600 py-2 px-2 rounded-lg shadow-lg flex-row items-center justify-between active:scale-[0.99] mb-3"
+              className="bg-[#800000] py-2 px-2 rounded-lg shadow-lg flex-row items-center justify-between active:scale-[0.99] mb-3"
             >
-              <View className="flex-row items-center">
+              <View className="flex-row items-center flex-1">
                 <Image source={{ uri: item.artworkUrl100 }} className="rounded-lg shadow-md" style={{ width: width * 0.15, height: width * 0.15 }} />
                 <View className="ml-2 mr-2">
                   <Text className="text-white font-bold md:text-xl lg:text-2xl w-60 truncate">{item.trackName}</Text>
                   <Text className="text-[#CEF6B8] md:text-lg w-60 truncate">{item.artistName}</Text>
                 </View>
               </View>
+              <TouchableOpacity onPress={() => toggleFavorite(item.trackId)}>
+                <MaterialCommunityIcons
+                  name={favorites.includes(item.trackId) ? "heart" : "heart-outline"}
+                  size={width * 0.1}
+                  color="#FFFFFF"
+                />
+              </TouchableOpacity>
               {item.previewUrl && (
                 <Pressable onPress={() => playPreview(item.previewUrl)} className="bg-green-400 rounded-full shadow-lg flex-row items-center justify-center active:scale-95">
                   <MaterialCommunityIcons
@@ -415,6 +424,13 @@ const SearchScreen = () => {
               {currentTrackData.artistName}
             </Text>
           </View>
+          <TouchableOpacity onPress={() => toggleFavorite(currentTrackData.trackId)}>
+            <MaterialCommunityIcons
+              name={favorites.includes(currentTrackData.trackId) ? "heart" : "heart-outline"}
+              size={width * 0.1}
+              color="#800000"
+            />
+          </TouchableOpacity>
           <TouchableOpacity onPress={handlePrevious}>
             <MaterialCommunityIcons name="skip-previous-circle" size={width * 0.1} color="white" />
           </TouchableOpacity>
