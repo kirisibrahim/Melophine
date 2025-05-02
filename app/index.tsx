@@ -56,7 +56,7 @@ const HomeScreen = () => {
         </TouchableOpacity>
         <TouchableOpacity
           className="bg-[#FF0000]/80 absolute top-20 left-2 rounded-full shadow-lg flex-row items-center justify-center"
-          onPress={() => router.push("/profile")}
+          onPress={() => router.push("/info")}
         >
           <LottieView
             source={require("../assets/lottie/question.json")}

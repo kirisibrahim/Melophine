@@ -43,7 +43,7 @@ export const createQuizQuestion = async (): Promise<QuizQuestion | null> => {
   const choices = shuffle([...selectedWrongSongs, correctSong.trackName]);
 
   return {
-    question: "Hangi şarkı çalıyor?",
+    question: "Çalan Şarkının İsmi?",
     previewUrl: correctSong.previewUrl,
     correctAnswer: correctSong.trackName,
     choices,
