@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { View, Text, Animated, Dimensions } from "react-native";
+import { View, Text, Animated, Dimensions, Alert, TouchableOpacity } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Progress from "react-native-progress";
 import { LinearGradient } from "expo-linear-gradient";
@@ -27,10 +27,31 @@ const ScoresTab = () => {
         Animated.timing(fadeAnim, { toValue: 1, duration: 800, useNativeDriver: true }).start();
     }, []);
 
-    const successRate =
+    const successRate = (
         totals.correctCount + totals.wrongCount > 0
             ? totals.correctCount / (totals.correctCount + totals.wrongCount)
-            : 0;
+            : 0
+    );
+
+    const clearQuizTotals = async (setTotals: Function) => {
+        try {
+            await AsyncStorage.removeItem("quizTotals"); // Depolanan veriyi temizle
+            setTotals({ score: 0, correctCount: 0, wrongCount: 0 }); // Ekrandaki bilgileri sıfırla
+        } catch (error) {
+            console.error("Verileri sıfırlama hatası:", error);
+        }
+    };
+
+    const confirmResetQuiz = (setTotals: Function) => {
+        Alert.alert(
+            "Verileri Sıfırla",
+            "Tüm quiz istatistiklerini sıfırlamak istediğinizden emin misiniz?",
+            [
+                { text: "İptal", style: "cancel" },
+                { text: "Evet", onPress: () => clearQuizTotals(setTotals) },
+            ]
+        );
+    };
 
     return (
         <View className="flex-1 items-center justify-center">
@@ -44,7 +65,7 @@ const ScoresTab = () => {
                     key={index}
                     style={{
                         width: width * 0.9,
-                        marginBottom: width*0.04,
+                        marginBottom: width * 0.03,
                         opacity: fadeAnim,
                         transform: [{ scale: fadeAnim }],
                         shadowColor: "#000",
@@ -54,17 +75,18 @@ const ScoresTab = () => {
                         elevation: 8,
                     }}
                 >
-                    <LinearGradient colors={gradient as [ColorValue, ColorValue]} start={{x:0.3, y:0}} end={{x:0.8, y:1}}  style={{
-                        padding: width * 0.06, borderRadius: width * 0.1, width: "100%", alignItems: "center"
+                    <LinearGradient colors={gradient as [ColorValue, ColorValue]} start={{ x: 0.3, y: 0 }} end={{ x: 0.8, y: 1 }} style={{
+                        padding: width * 0.03, borderRadius: width * 0.07, width: "100%", alignItems: "center"
                     }}>
-                        <Text className="text-white font-bold text-2xl mb-2">{title}</Text>
-                        <Text className="font-extrabold text-5xl" style={{color: textColor}}>{value}</Text>
+                        <Text className="text-white font-bold text-2xl">{title}</Text>
+                        <Text className="font-extrabold text-5xl" style={{ color: textColor }}>{value}</Text>
                     </LinearGradient>
                 </Animated.View>
             ))}
             <Animated.View
                 style={{
                     width: width * 0.9,
+                    marginBottom: width * 0.15,
                     opacity: fadeAnim,
                     transform: [{ scale: fadeAnim }],
                     shadowColor: "#00FF00",
@@ -75,9 +97,9 @@ const ScoresTab = () => {
                 }}
             >
                 <LinearGradient colors={["#0F2027", "#203A43"] as [ColorValue, ColorValue]} style={{
-                    padding: width * 0.06, borderRadius: width * 0.1, width: "100%", alignItems: "center"
+                    padding: width * 0.03, borderRadius: width * 0.08, width: "100%", alignItems: "center"
                 }}>
-                    <Text className="text-white font-bold text-2xl mb-2">Başarı Oranı</Text>
+                    <Text className="text-white font-bold text-2xl">Başarı Oranı</Text>
                     <Progress.Circle
                         progress={successRate}
                         color="#00FF00"
@@ -90,9 +112,24 @@ const ScoresTab = () => {
                     />
                 </LinearGradient>
             </Animated.View>
+            <Animated.View style={{opacity: fadeAnim,transform: [{ scale: fadeAnim }]}} className="mb-6">
+                <TouchableOpacity onPress={() => confirmResetQuiz(setTotals)}
+                    style={{
+                        backgroundColor: "red",
+                        paddingVertical: width*0.05,
+                        paddingHorizontal: width*0.1,
+                        borderRadius: width * 0.05,
+                        shadowColor: "#000",
+                        shadowOffset: { width: 0, height: 4 },
+                        shadowOpacity: 0.3,
+                        shadowRadius: 4.65,
+                        elevation: 8,
+                    }}
+                >
+                    <Text className="text-white text-xl font-bold">Verileri Sıfırla</Text>
+                </TouchableOpacity>
+            </Animated.View>
         </View>
-
-
     );
 };
 

@@ -51,11 +51,11 @@ const QuizScreen = () => {
   }, []);
 
   const getScoreColor = (score: number) => {
-    return score >= 4 ? "green" : score >= 3 ? "orange" : "red";
+    return score >= 11 ? "green" : score >= 7 ? "yellow" : "red";
   };
 
   const getMessage = (score: number) => {
-    return score >= 5 ? "Muhteşemsin!" : score >= 3 ? "Gayet iyi!" : "Daha iyisini yapabilirsin!";
+    return score >= 11 ? "Muhteşemsin!" : score >= 7 ? "Gayet iyi!" : "Daha iyi olabilir!";
   };
 
   useEffect(() => {
@@ -85,7 +85,7 @@ const QuizScreen = () => {
         setIcon("volume-mute");
       }, 5000);
 
-      return () => clearTimeout(timer); //Bellek temizleme
+      return () => clearTimeout(timer);
     }
   }, [phase, currentQuestionIndex]);
 
@@ -359,13 +359,11 @@ const QuizScreen = () => {
       setScore((prev) => prev + 3);
       setCorrectCount((prev) => prev + 1);
       setFeedback("correct");
-      playSound(true); // Doğru cevaba göre ses
     } else {
       // Cevap verilmediğinde de (selectedAnswer === null) veya yanlış cevapta
       setScore((prev) => prev - 1);
       setWrongCount((prev) => prev + 1);
       setFeedback("wrong");
-      playSound(false);  // Yanlış veya zaman aşımı durumunda ses
     }
 
     // Sonraki soruya geçişte 1500ms gecikme veriliyor
