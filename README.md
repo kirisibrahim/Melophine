@@ -2,7 +2,7 @@
 
 Bu proje, **React Native** ve **Expo** kullanılarak geliştirilmiş **etkileşimli bir quiz uygulamasıdır**.  
 Dinamik animasyonlar, ses efektleri, lokal veri saklama ve kullanıcı dostu bir deneyim sunar. Deezer API kullanıldı.
-State yönetimi lokal react native (askerden gelince Zustand'a geçireceğim..:D).
+State yönetimi lokal react native.
 
 ---
 
